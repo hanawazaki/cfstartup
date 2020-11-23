@@ -3,7 +3,6 @@ package main
 import (
 	"cfstartup/handler"
 	"cfstartup/user"
-	"fmt"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -25,24 +24,12 @@ func main() {
 
 	userHandler := handler.NewUserHandler(userService)
 
-	inputUser := user.LoginInput{
-		Email:    "mail5@mail.com",
-		Password: "password",
-	}
-	user, err := userService.Login(inputUser)
-	if err != nil {
-		fmt.Println("Terjadi kesalahan ")
-		fmt.Println(err.Error())
-	}
-
-	fmt.Println(user.Email)
-	fmt.Println(user.Name)
-
 	router := gin.Default()
 
 	api := router.Group("/api/v1")
 
 	api.POST("/users/", userHandler.RegisterUser)
+	api.POST("/sessions/", userHandler.Login)
 
 	router.Run()
 
