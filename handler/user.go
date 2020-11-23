@@ -77,6 +77,16 @@ func (h *userHandler) Login(c *gin.Context) {
 
 }
 
+func (h *userHandler) FetchUser(c *gin.Context) {
+	currentUser := c.MustGet("currentUser").(user.User)
+
+	formatter := user.FormatUser(currentUser, "")
+
+	response := helper.APIResponse("Successfully Fetch user data", http.StatusOK, "success", formatter)
+
+	c.JSON(http.StatusOK, response)
+}
+
 // newbie notes
 
 // ~alur handler~
