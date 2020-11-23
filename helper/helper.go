@@ -36,6 +36,3 @@ func FormatValidationError(err error) []string {
 
 	return errors
 }
-
-// newbie notes
-// function APIResponse dibuat untuk membuat obj dari struct response

@@ -10,6 +10,7 @@ type Service interface {
 	RegisterUser(input RegisterUserInput) (User, error)
 	Login(input LoginInput) (User, error)
 	IsEmailAvailable(input CheckEmailInput) (bool, error)
+	SaveAvatar(ID int, fileLocation string) (User, error)
 }
 
 type service struct {
@@ -79,18 +80,19 @@ func (s *service) IsEmailAvailable(input CheckEmailInput) (bool, error) {
 
 }
 
-// newbie notes
+func (s *service) SaveAvatar(ID int, fileLocation string) (User, error) {
+	user, err := s.repository.FindByID(ID)
+	if err != nil {
+		return user, err
+	}
 
-// interface RegisterUser dibuat dengan param input RegisterUserInput yang sudah dipass dari handler
-// dengan nilai balikan User / error
-// service mewakili fitur/logic sehingga nama service biasanya kata kerja seperti
-// create/update/register dll
+	user.AvatarFileName = fileLocation
 
-/*
-service struct memiliki dependency terhadap repository
-karena service akan melakukan save ke db "melalui" Repository
-maka obj di dalam nya adalah repository dengan interface Repository
-*/
+	updatedUser, err := s.repository.Update(user)
+	if err != nil {
+		return updatedUser, err
+	}
 
-// newService dibuat untuk mempassing nilai yang diproses di RegisterUser
-// ke dalam struct service dengan nilai {repository}
+	return updatedUser, nil
+
+}
