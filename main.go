@@ -4,7 +4,6 @@ import (
 	"cfstartup/auth"
 	"cfstartup/handler"
 	"cfstartup/user"
-	"fmt"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -24,8 +23,6 @@ func main() {
 	userService := user.NewService(userRepository)
 	authService := auth.NewService()
 	userHandler := handler.NewUserHandler(userService, authService)
-
-	fmt.Println(authService.GenerateToken(1001))
 
 	router := gin.Default()
 
