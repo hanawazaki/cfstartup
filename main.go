@@ -1,8 +1,10 @@
 package main
 
 import (
+	"cfstartup/auth"
 	"cfstartup/handler"
 	"cfstartup/user"
+	"fmt"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -19,10 +21,11 @@ func main() {
 	}
 
 	userRepository := user.NewRepository(db)
-
 	userService := user.NewService(userRepository)
+	authService := auth.NewService()
+	userHandler := handler.NewUserHandler(userService, authService)
 
-	userHandler := handler.NewUserHandler(userService)
+	fmt.Println(authService.GenerateToken(1001))
 
 	router := gin.Default()
 
@@ -32,6 +35,7 @@ func main() {
 	api.POST("/sessions/", userHandler.Login)
 	api.POST("/email_checkers/", userHandler.CheckEmailAvailability)
 	api.POST("/avatars/", userHandler.UploadAvatar)
+
 	// api.GET("/users/fetch",authMiddleware(authService, userService),userHandler.FetchUser)
 
 	router.Run()
