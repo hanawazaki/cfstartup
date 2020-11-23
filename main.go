@@ -30,16 +30,9 @@ func main() {
 
 	api.POST("/users/", userHandler.RegisterUser)
 	api.POST("/sessions/", userHandler.Login)
+	api.POST("/email_checkers/", userHandler.CheckEmailAvailability)
 	// api.GET("/users/fetch",authMiddleware(authService, userService),userHandler.FetchUser)
 
 	router.Run()
 
 }
-
-// newbie notes
-
-// input, user melakukan input yang akan ditangkap oleh handler
-// handler, handler akan menangkap input user dan merubahnya menjadi struct input (RegisterUserInput)
-// service, lalu service akan merubah struct input menjadi struct user
-// repository, kemudian struct user dipassing ke repository lalu dimasukan ke db
-// dengan kata lain yg digunakan oleh repository adalah struct User, bukan struct input
