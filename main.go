@@ -6,7 +6,6 @@ import (
 	"cfstartup/handler"
 	"cfstartup/helper"
 	"cfstartup/user"
-	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -29,14 +28,11 @@ func main() {
 	campaignsRepository := campaign.NewRepository(db)
 
 	campaignService := campaign.NewService(campaignsRepository)
-
-	campaigns, _ := campaignService.FindCampaign(0)
-
-	fmt.Println(len(campaigns))
-
 	userService := user.NewService(userRepository)
 	authService := auth.NewService()
+
 	userHandler := handler.NewUserHandler(userService, authService)
+	campaignHandler := handler.NewCampaignHandler(campaignService)
 
 	router := gin.Default()
 
@@ -46,6 +42,8 @@ func main() {
 	api.POST("/sessions/", userHandler.Login)
 	api.POST("/email_checkers/", userHandler.CheckEmailAvailability)
 	api.POST("/avatars", authMiddleware(authService, userService), userHandler.UploadAvatar)
+
+	api.GET("/campaigns", campaignHandler.GetCampaigns)
 
 	// api.GET("/users/fetch",authMiddleware(authService, userService),userHandler.FetchUser)
 
