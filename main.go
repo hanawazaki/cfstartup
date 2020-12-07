@@ -2,9 +2,11 @@ package main
 
 import (
 	"cfstartup/auth"
+	"cfstartup/campaign"
 	"cfstartup/handler"
 	"cfstartup/helper"
 	"cfstartup/user"
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -24,6 +26,23 @@ func main() {
 	}
 
 	userRepository := user.NewRepository(db)
+	campaignsRepository := campaign.NewRepository(db)
+
+	// campaigns, err := campaignsRepository.FindAll()
+	campaignsByID, err := campaignsRepository.FindByUserID(10)
+
+	fmt.Println("debug")
+	fmt.Println("debug")
+	fmt.Println("debug")
+	fmt.Println(len(campaignsByID))
+
+	for _, campaigns := range campaignsByID {
+		fmt.Println(campaigns.Name)
+		if len(campaigns.CampaignImages) > 0 {
+			fmt.Println(campaigns.CampaignImages[0].FileName)
+		}
+	}
+
 	userService := user.NewService(userRepository)
 	authService := auth.NewService()
 	userHandler := handler.NewUserHandler(userService, authService)
